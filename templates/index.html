@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain Node</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+        h1 { color: #333; }
+        form { margin: 10px 0; }
+        input { margin: 5px; padding: 5px; }
+        .block, .tx { background: #fff; padding: 10px; margin: 10px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    </style>
+</head>
+<body>
+    <h1>📦 Blockchain Node Dashboard</h1>
+    <p><strong>Node ID:</strong> {{ node_id }}</p>
+
+    <form action="/transactions/new" method="POST">
+        <h2>➕ Add Transaction</h2>
+        <input name="sender" placeholder="Sender" required>
+        <input name="recipient" placeholder="Recipient" required>
+        <input name="amount" placeholder="Amount" required>
+        <button type="submit">Add Transaction</button>
+    </form>
+
+    <form action="/nodes/register" method="POST">
+        <h2>🔗 Register Peer Node</h2>
+        <input name="node" placeholder="http://localhost:5001" required>
+        <button type="submit">Register Node</button>
+    </form>
+
+    <a href="/mine"><button>⛏️ Mine Block</button></a>
+    <a href="/nodes/resolve"><button>🔄 Resolve Conflicts</button></a>
+
+    <h2>⛓ Blockchain</h2>
+    {% for block in chain %}
+        <div class="block">
+            <strong>Block #{{ block.index }}</strong><br>
+            Time: {{ block.timestamp }}<br>
+            Proof: {{ block.proof }}<br>
+            Previous Hash: {{ block.previous_hash }}<br>
+            Transactions: {{ block.transactions }}
+        </div>
+    {% endfor %}
+
+    <h2>🧾 Pending Transactions</h2>
+    {% for tx in transactions %}
+        <div class="tx">
+            {{ tx }}
+        </div>
+    {% else %}
+        <p>No transactions</p>
+    {% endfor %}
+
+    <h2>🌐 Peers</h2>
+    <ul>
+    {% for peer in peers %}
+        <li>{{ peer }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
